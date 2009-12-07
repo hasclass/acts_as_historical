@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "acts_as_historical"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{ActiveRecord plugin for historical data (stock prices, pageviews, etc).}
+    gem.description = %Q{}
     gem.email = "sebastian.burkhard@gmail.com"
     gem.homepage = "http://github.com/hasclass/acts_as_historical"
     gem.authors = ["hasclass"]
