@@ -16,11 +16,11 @@ module ActsAsHistorical
     #
     def acts_as_historical(opts = {})
       configuration = { 
-        :date_column => "snapshot_date",
+      #  :date_column => "snapshot_date",
         :days => :all_days,
         :scope => nil
       }
-      configuration.update(options) if opts.is_a?(Hash)
+      configuration.update(opts) if opts.is_a?(Hash)
 
       send :include, InstanceMethods
       send :extend, DynamicClassMethods
@@ -32,7 +32,7 @@ module ActsAsHistorical
         send :extend, WeekDays::ClassMethods
       end
       self.cattr_accessor :historical_date_col, :historical_scope, :only_weekdays
-      self.historical_date_col = configuration[:date_column]
+      self.historical_date_col = 'snapshot_date' #configuration[:date_column]
       self.historical_scope    = configuration[:scope]
       
       order_desc = "#{self.historical_date_col_sql} DESC"
