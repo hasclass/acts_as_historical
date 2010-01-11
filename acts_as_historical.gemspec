@@ -9,21 +9,23 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["hasclass"]
-  s.date = %q{2009-12-07}
+  s.date = %q{2010-01-11}
   s.description = %q{}
   s.email = %q{sebastian.burkhard@gmail.com}
   s.extra_rdoc_files = [
-    "README",
+    "LICENSE",
+     "README",
      "README.rdoc"
   ]
   s.files = [
     ".document",
      ".gitignore",
-     "MIT-LICENSE",
+     "LICENSE",
      "README",
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "acts_as_historical.gemspec",
      "lib/acts_as_historical.rb",
      "rails/init.rb",
      "test/acts_as_historical_test.rb",
