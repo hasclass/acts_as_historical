@@ -1,5 +1,3 @@
-# To change this template, choose Tools | Templates
-# and open the template in the editor.
 
 module ActsAsHistorical
 
@@ -8,13 +6,21 @@ module ActsAsHistorical
   end
 
   module ClassMethods
-    def acts_as_historical(options = {})
+    
+    # acts_as_historical
+    # 
+    #
+    # @option opts [Symbol] :date_column (:snapshot_date) the database column for the date of the record 
+    # @option opts [Symbol] :days (:all_days) what days are records valid. 
+    # @option opts [Symbol] :scope (nil)
+    #
+    def acts_as_historical(opts = {})
       configuration = { 
         :date_column => "snapshot_date",
         :days => :all_days,
         :scope => nil
       }
-      configuration.update(options) if options.is_a?(Hash)
+      configuration.update(options) if opts.is_a?(Hash)
 
       send :include, InstanceMethods
       send :extend, DynamicClassMethods
@@ -100,6 +106,7 @@ module ActsAsHistorical
 
       # validations
       validate :valid_date?, :on => :save
+      nil
     end
   end
 
@@ -119,9 +126,12 @@ module ActsAsHistorical
     end
   end
 
-
   module InstanceMethods
     def valid_date?
+      if snapshot_date.nil?
+        errors.add_to_base('snapshot_date missing')
+        return false
+      end
       if self.class.only_weekdays and snapshot_date and snapshot_date.cwday >= 6
         errors.add_to_base('snapshot_date is not a weekday')
         return false
