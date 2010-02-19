@@ -32,3 +32,7 @@ def load_schema
   load(File.dirname(__FILE__) + "/schema.rb")
   require File.dirname(__FILE__) + '/../rails/init.rb'
 end
+
+class Date
+  def to_date(); self; end
+end

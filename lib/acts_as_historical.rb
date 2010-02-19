@@ -16,7 +16,6 @@ module ActsAsHistorical
     def acts_as_historical(opts = {})
       configuration = { 
         :date_column => "snapshot_date",
-        :
         :scope => nil
       }
       configuration.update(opts) if opts.is_a?(Hash)
@@ -90,24 +89,24 @@ module ActsAsHistorical
       # Does not include date
       # 
       named_scope :upto, lambda {|date| 
-        raise "passed parameter does not respond_to? to_date" if date.respond_to?(:to_date)
+        raise "passed parameter does not respond_to? to_date" unless date.respond_to?(:to_date)
         { :conditions => ["#{self.historical_date_col_sql} < ?", date.to_date] }
       }
 
       # Includes date
       #
       named_scope :upto_including, lambda {|date| 
-        raise "passed parameter does not respond_to? to_date" if date.respond_to?(:to_date)
+        raise "passed parameter does not respond_to? to_date" unless date.respond_to?(:to_date)
         { :conditions => ["#{self.historical_date_col_sql} <= ?", date.to_date] }
       }
 
       named_scope :from, lambda {|date| 
-        raise "passed parameter does not respond_to? to_date" if date.respond_to?(:to_date)
+        raise "passed parameter does not respond_to? to_date" unless date.respond_to?(:to_date)
         { :conditions => ["#{self.historical_date_col_sql} > ?", date.to_date] }
       }
 
       named_scope :from_including, lambda {|date| 
-        raise "passed parameter does not respond_to? to_date" if date.respond_to?(:to_date)
+        raise "passed parameter does not respond_to? to_date" unless date.respond_to?(:to_date)
         { :conditions => ["#{self.historical_date_col_sql} >= ?", date.to_date] }
       }
 
@@ -147,9 +146,9 @@ module ActsAsHistorical
       end
       true
     end
-    
-    def previous; find_record_at(prev_day);   end
-    def next;     find_record_at(next_day);   end
+
+    def previous; find_record_at(to_date - 1);   end
+    def next;     find_record_at(to_date + 1);   end
 
     def to_date
       self.send(self.class.historical_date_col)
@@ -158,17 +157,6 @@ module ActsAsHistorical
     private
     def find_record_at(date)
       self.class.at_date(date).same_scope(self).find(:first)
-    end
-
-    def next_day; self.class.step_date(to_date,  1); end
-    def prev_day; self.class.step_date(to_date, -1); end  
-  end
-
-  module AllDays
-    module ClassMethods
-      def step_date(date, step_size)
-        date + step_size
-      end
     end
   end
 end

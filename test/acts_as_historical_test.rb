@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 
 class ActsAsHistoricalTest < ActiveSupport::TestCase
   load_schema 
+
   
   class Record < ActiveRecord::Base
     acts_as_historical
@@ -35,7 +36,42 @@ class ActsAsHistoricalTest < ActiveSupport::TestCase
     should "create 5 records" do
       assert_equal 5, Record.count
     end
-    
+
+    context "upto" do
+      should "return records upto date excluding date" do
+        assert Record.upto(@tue).include?(@r_mon)
+        assert !Record.upto(@tue).include?(@r_tue)
+        assert !Record.upto(@tue).include?(@r_wed)
+      end
+    end
+
+    context "upto_including" do
+      should "return records upto and including given date" do
+        records = Record.upto_including(@tue)
+        assert  records.include?(@r_mon)
+        assert  records.include?(@r_tue)
+        assert !records.include?(@r_wed)
+      end
+    end
+
+    context "from_including" do
+      should "return records from including given date" do
+        records = Record.from_including(@tue)
+        assert !records.include?(@r_mon)
+        assert  records.include?(@r_tue)
+        assert  records.include?(@r_wed)
+      end
+    end
+
+    context "from" do
+      should "return records from excluding given date" do
+        records = Record.from(@tue)
+        assert !records.include?(@r_mon)
+        assert !records.include?(@r_tue)
+        assert  records.include?(@r_wed)
+      end
+    end
+
     context "nearest" do
       should "always return monday no matter what tolerance range" do
         assert_equal @r_mon, Record.nearest(@mon-1, 1).first
@@ -51,7 +87,7 @@ class ActsAsHistoricalTest < ActiveSupport::TestCase
       end
     end
   
-    context "within" do
+    context "between" do
       setup { @records = Record.between(@tue, @wed)}
       
       should "include only days within range" do
@@ -63,7 +99,7 @@ class ActsAsHistoricalTest < ActiveSupport::TestCase
       end
       
       should "return record when range start and end are the same" do
-        assert  Record.between(@mon, @mon).include?(@r_mon)
+        assert Record.between(@mon, @mon).include?(@r_mon)
       end
     end
   end
