@@ -38,15 +38,13 @@ module ActsAsHistorical
       order_desc = "#{self.historical_date_col_sql} DESC"
       order_asc = "#{self.historical_date_col_sql} ASC"
       
-      default_scope :order => order_desc
-      
       # named_scopes - sortings
       named_scope :asc,  :order => order_asc
       named_scope :desc, :order => order_desc
 
       named_scope :oldest,        :limit => 1, :order => order_asc
-      named_scope :newest,        :limit => 1
-      named_scope :newest_two,    :limit => 2
+      named_scope :newest,        :limit => 1, :order => order_desc
+      named_scope :newest_two,    :limit => 2, :order => order_desc
     
       # one snapshot per week (every wednesday)      
       named_scope :weekly,
