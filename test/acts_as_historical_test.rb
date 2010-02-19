@@ -7,10 +7,6 @@ class ActsAsHistoricalTest < ActiveSupport::TestCase
     acts_as_historical
   end
 
-  class RecordWeekday < ActiveRecord::Base
-    acts_as_historical :days => :weekdays
-  end
-  
   def test_schema_has_loaded_correctly 
     assert Record.all
   end 
@@ -71,83 +67,4 @@ class ActsAsHistoricalTest < ActiveSupport::TestCase
       end
     end
   end
-
-  context ":days => :weekdays" do
-    context "day present" do
-      setup {
-        RecordWeekday.delete_all
-        @old = RecordWeekday.create! :snapshot_date => Date.new(2009,12,4)
-        @new = RecordWeekday.create! :snapshot_date => Date.new(2009,12,7)
-      }
-      context "#previous" do
-        should "return record of previous weekday" do
-          assert_equal @old, @new.previous
-        end
-      end
-      context "#next" do
-        should "return record of next weekday" do
-          assert_equal @new, @old.next
-        end
-      end
-    end
-  
-    context "day missing" do
-      setup {
-        RecordWeekday.delete_all
-        @record = RecordWeekday.create! :snapshot_date => Date.new(2009,12,3)
-      }
-      context "#previous" do
-        should "return nil if record on previous weekday" do
-          assert_equal nil, @record.previous
-        end
-      end
-    
-      context "#next" do
-        should "return nil if record on next weekday" do
-          assert_equal nil, @record.next
-        end
-      end
-    end
-  end
-  
-  context ":days => :all_days" do
-    context "day present" do
-      setup {
-        Record.delete_all
-        @old = Record.create! :snapshot_date => Date.new(2009,12,3)
-        @new = Record.create! :snapshot_date => Date.new(2009,12,4)
-      }
-      context "#previous" do
-        should "return record of previous day" do
-          assert_equal @old, @new.previous
-        end
-      end
-      context "#next" do
-        should "return record of next day" do
-          assert_equal @new, @old.next
-        end
-      end
-    end
-  
-    context "day missing" do
-      setup {
-        Record.delete_all
-        @record = Record.create! :snapshot_date => Date.new(2009,12,3)
-      }
-      context "#previous" do
-        should "return nil if record on previous day" do
-          assert_equal nil, @record.previous
-        end
-      end
-    
-      context "#next" do
-        should "return nil if record on next day" do
-          assert_equal nil, @record.next
-        end
-      end
-    end
-  end
-
-
-
 end
