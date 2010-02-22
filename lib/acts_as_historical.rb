@@ -157,7 +157,7 @@ module ActsAsHistorical
 
     private
     def find_record_at(date)
-      self.class.at_date(date).same_scope(self).find(:first)
+      self.class.on_date(date).same_scope(self).find(:first)
     end
   end
 end
