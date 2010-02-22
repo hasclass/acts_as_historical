@@ -69,9 +69,11 @@ module ActsAsHistorical
           :limit => 1
       }}
 
+      # between(older_date, newer_date)
+      #
       named_scope :between, lambda {|*args|
         from, to = args
-        range = from.to_date..to.to_date
+        range = (from.to_date..to.to_date)
         { :conditions => {self.historical_date_col => range } }
       }
 
@@ -80,7 +82,7 @@ module ActsAsHistorical
       #
       named_scope :nearest, lambda {|*args| 
         date, tolerance = args
-        range = self.tolerance_to_range(date.to_date, tolerance)
+        range = self.tolerance_to_range(date, tolerance)
         {
           :conditions => {self.historical_date_col => range},
           :order => ["ABS(DATEDIFF(#{self.historical_date_col_sql}, '#{date.to_date.to_s(:db)}')) ASC"]
@@ -148,14 +150,21 @@ module ActsAsHistorical
       true
     end
 
-    def previous; find_record_at(to_date - 1);   end
-    def next;     find_record_at(to_date + 1);   end
+    def previous; find_record_at(snapshot_date - 1);   end
+    def next;     find_record_at(snapshot_date + 1);   end
+
+    # override with your date implementation. eg. Weekday
+    #
+    #def snapshot_date
+    #  self[self.class.historical_date_col]
+    #end
 
     def to_date
-      self.send(self.class.historical_date_col)
+      snapshot_date.to_date
     end
 
     private
+
     def find_record_at(date)
       self.class.on_date(date).same_scope(self).find(:first)
     end
