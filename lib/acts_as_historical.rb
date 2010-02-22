@@ -24,12 +24,13 @@ module ActsAsHistorical
       send :extend, DynamicClassMethods
       
       self.cattr_accessor :historical_date_col, :historical_scope, :only_weekdays
-      self.historical_date_col = 'snapshot_date' #configuration[:date_column]
+
+      self.historical_date_col = configuration[:date_column]
       self.historical_scope    = configuration[:scope]
-      
+
       order_desc = "#{self.historical_date_col_sql} DESC"
       order_asc = "#{self.historical_date_col_sql} ASC"
-      
+
       # named_scopes - sortings
       named_scope :asc,  :order => order_asc
       named_scope :desc, :order => order_desc

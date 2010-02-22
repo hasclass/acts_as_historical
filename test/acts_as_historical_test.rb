@@ -17,6 +17,12 @@ class ActsAsHistoricalTest < ActiveSupport::TestCase
     assert_equal Record.create(:snapshot_date => date).to_date, date
   end
 
+  context "Record" do
+    should "have default date = snapshot_date" do
+      assert_equal 'snapshot_date', Record.historical_date_col
+    end
+  end
+
   context 'named_scopes with 5 weekdays' do
     setup {
       Record.delete_all
@@ -35,6 +41,18 @@ class ActsAsHistoricalTest < ActiveSupport::TestCase
     
     should "create 5 records" do
       assert_equal 5, Record.count
+    end
+
+    context "newest" do
+      should "be friday" do
+        assert_equal @r_fri, Record.newest.first
+      end
+    end
+
+    context "oldest" do
+      should "be monday" do
+        assert_equal @r_mon, Record.oldest.first
+      end
     end
 
     context "upto" do
