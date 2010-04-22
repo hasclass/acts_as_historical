@@ -160,7 +160,7 @@ module ActsAsHistorical
     #end
 
     def to_date
-      snapshot_date.to_date
+      snapshot_date and snapshot_date.to_date
     end
 
     private
