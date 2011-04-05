@@ -1,8 +1,7 @@
-module ActsAsHistorical
+require 'active_support/concern'
 
-  def self.included(base)
-    base.extend(ClassMethods)
-  end
+module ActsAsHistorical
+  extend ActiveSupport::Concern
 
   module ClassMethods
 
@@ -17,10 +16,11 @@ module ActsAsHistorical
         :date_column => "snapshot_date",
         :scope => nil
       }
+
       configuration.update(opts) if opts.is_a?(Hash)
 
       send :include, InstanceMethods
-      send :extend, DynamicClassMethods
+      send :extend,  DynamicClassMethods
 
       self.cattr_accessor :historical_date_col, :historical_scope, :only_weekdays
 
