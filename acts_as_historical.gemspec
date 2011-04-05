@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'mysql',    '>= 0'
   s.add_development_dependency 'shoulda',  '>= 0'
-  s.add_development_dependency 'mocha',    '>= 0'
   s.add_development_dependency 'redgreen', '>= 0'
   s.add_development_dependency 'date_ext', '>= 0'
 

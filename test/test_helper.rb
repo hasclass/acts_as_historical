@@ -5,7 +5,6 @@ require 'active_support'
 require 'active_support/test_case'
 require 'test/unit'
 require 'shoulda'
-require 'mocha'
 require 'redgreen'
 
 ENV['RAILS_ENV'] = 'test'
