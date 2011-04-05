@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   # easier, and any values you enter will be overwritten when the "gemspec"
   # task is run.
   s.name              = 'acts_as_historical'
-  s.version           = '0.1.4'
+  s.version           = '0.2.0'
   s.date              = '2011-04-05'
   s.rubyforge_project = 'acts_as_historical'
 
