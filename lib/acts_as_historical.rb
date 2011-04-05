@@ -1,4 +1,3 @@
-
 module ActsAsHistorical
 
   def self.included(base)
@@ -6,15 +5,15 @@ module ActsAsHistorical
   end
 
   module ClassMethods
-    
+
     # acts_as_historical
-    # 
     #
-    # @option opts [Symbol] :date_column (:snapshot_date) the database column for the date of the record 
+    #
+    # @option opts [Symbol] :date_column (:snapshot_date) the database column for the date of the record
     # @option opts [Symbol] :scope (nil)
     #
     def acts_as_historical(opts = {})
-      configuration = { 
+      configuration = {
         :date_column => "snapshot_date",
         :scope => nil
       }
@@ -22,7 +21,7 @@ module ActsAsHistorical
 
       send :include, InstanceMethods
       send :extend, DynamicClassMethods
-      
+
       self.cattr_accessor :historical_date_col, :historical_scope, :only_weekdays
 
       self.historical_date_col = configuration[:date_column]
@@ -38,8 +37,8 @@ module ActsAsHistorical
       named_scope :oldest,        :limit => 1, :order => order_asc
       named_scope :newest,        :limit => 1, :order => order_desc
       named_scope :newest_two,    :limit => 2, :order => order_desc
-    
-      # one snapshot per week (every wednesday)      
+
+      # one snapshot per week (every wednesday)
       named_scope :weekly,
                   :conditions => "DAYOFWEEK(#{self.historical_date_col_sql}) = 2"
 
@@ -56,7 +55,7 @@ module ActsAsHistorical
           :conditions => ["#{self.historical_date_col_sql} > ?", Date.today - 364]
       }}
 
-      named_scope :same_scope, lambda {|record| 
+      named_scope :same_scope, lambda {|record|
         if self.historical_scope.nil?
           {}
         else
@@ -80,7 +79,7 @@ module ActsAsHistorical
       # nearest(date, 1)
       # nearest(date, (date_from..date_to))
       #
-      named_scope :nearest, lambda {|*args| 
+      named_scope :nearest, lambda {|*args|
         date, tolerance = args
         range = self.tolerance_to_range(date, tolerance)
         {
@@ -90,25 +89,25 @@ module ActsAsHistorical
       }
 
       # Does not include date
-      # 
-      named_scope :upto, lambda {|date| 
+      #
+      named_scope :upto, lambda {|date|
         raise "passed parameter does not respond_to? to_date" unless date.respond_to?(:to_date)
         { :conditions => ["#{self.historical_date_col_sql} < ?", date.to_date] }
       }
 
       # Includes date
       #
-      named_scope :upto_including, lambda {|date| 
+      named_scope :upto_including, lambda {|date|
         raise "passed parameter does not respond_to? to_date" unless date.respond_to?(:to_date)
         { :conditions => ["#{self.historical_date_col_sql} <= ?", date.to_date] }
       }
 
-      named_scope :from, lambda {|date| 
+      named_scope :from, lambda {|date|
         raise "passed parameter does not respond_to? to_date" unless date.respond_to?(:to_date)
         { :conditions => ["#{self.historical_date_col_sql} > ?", date.to_date] }
       }
 
-      named_scope :from_including, lambda {|date| 
+      named_scope :from_including, lambda {|date|
         raise "passed parameter does not respond_to? to_date" unless date.respond_to?(:to_date)
         { :conditions => ["#{self.historical_date_col_sql} >= ?", date.to_date] }
       }
@@ -125,7 +124,7 @@ module ActsAsHistorical
     def historical_date_col_sql
       "`#{self.table_name}`.`#{self.historical_date_col}`"
     end
-    
+
     def tolerance_to_range(date,range)
       if range.is_a?(Numeric)
         range = (date - range)..(date + range)
