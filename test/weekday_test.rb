@@ -1,5 +1,5 @@
 require 'date_ext'
-require File.dirname(__FILE__) + '/test_helper.rb'
+require File.expand_path(File.dirname(__FILE__) + '/test_helper.rb')
 
 class ActsAsHistoricalWeekdayTest < ActiveSupport::TestCase
   load_schema

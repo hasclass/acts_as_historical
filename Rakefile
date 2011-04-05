@@ -10,8 +10,16 @@ begin
     gem.email = "sebastian.burkhard@gmail.com"
     gem.homepage = "http://github.com/hasclass/acts_as_historical"
     gem.authors = ["hasclass"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+
+    gem.add_dependency "activerecord",  "~> 2.3.5"
+    gem.add_dependency "activesupport", "~> 2.3.5"
+
+    gem.add_development_dependency "mysql",    ">= 0"
+    gem.add_development_dependency "shoulda",  ">= 0"
+    gem.add_development_dependency "mocha",    ">= 0"
+    gem.add_development_dependency "redgreen", ">= 0"
+    gem.add_development_dependency "date_ext", ">= 0"
+    gem.add_development_dependency "jeweler",  ">= 0"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
@@ -38,8 +46,6 @@ rescue LoadError
     abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
   end
 end
-
-task :test => :check_dependencies
 
 task :default => :test
 
