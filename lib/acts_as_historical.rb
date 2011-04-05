@@ -19,8 +19,8 @@ module ActsAsHistorical
 
       configuration.update(opts) if opts.is_a?(Hash)
 
-      send :include, InstanceMethods
-      send :extend,  DynamicClassMethods
+      send :include, LazyInstanceMethods
+      send :extend,  LazyClassMethods
 
       self.cattr_accessor :historical_date_col, :historical_scope, :only_weekdays
 
@@ -120,7 +120,9 @@ module ActsAsHistorical
     end
   end
 
-  module DynamicClassMethods
+  # Methods added to the class only once +acts_as_historical+ is called;
+  # prevents polluting all ActiveRecord::Base instances with these methods.
+  module LazyClassMethods
     def historical_date_col_sql
       "`#{self.table_name}`.`#{self.historical_date_col}`"
     end
@@ -136,7 +138,10 @@ module ActsAsHistorical
     end
   end
 
-  module InstanceMethods
+  # Methods added to the record instance only once +acts_as_historical+ is
+  # called; prevents polluting all ActiveRecord::Base instances with these
+  # methods.
+  module LazyInstanceMethods
     def valid_date?
       if self.to_date.nil?
         errors.add_to_base('date missing')
