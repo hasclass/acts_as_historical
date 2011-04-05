@@ -26,8 +26,8 @@ Gem::Specification.new do |s|
 
   s.require_path = 'lib'
 
-  s.add_dependency 'activerecord',  '~> 2.3.5'
-  s.add_dependency 'activesupport', '~> 2.3.5'
+  s.add_dependency 'activerecord',  '~> 3.0.5'
+  s.add_dependency 'activesupport', '~> 3.0.5'
 
   s.add_development_dependency 'mysql',    '>= 0'
   s.add_development_dependency 'shoulda',  '>= 0'
