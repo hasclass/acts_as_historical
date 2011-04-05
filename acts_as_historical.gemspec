@@ -29,10 +29,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'activerecord',  '~> 3.0.5'
   s.add_dependency 'activesupport', '~> 3.0.5'
 
-  s.add_development_dependency 'mysql',    '>= 0'
-  s.add_development_dependency 'shoulda',  '>= 0'
-  s.add_development_dependency 'redgreen', '>= 0'
-  s.add_development_dependency 'date_ext', '>= 0'
+  s.add_development_dependency 'test-unit', '>= 2.0'
+  s.add_development_dependency 'mysql',     '>= 0'
+  s.add_development_dependency 'shoulda',   '>= 0'
+  s.add_development_dependency 'date_ext',  '>= 0'
 
   # The manifest is created by the "gemspec" rake task. Do not edit it
   # directly; your changes will be wiped out when you next run the task.
