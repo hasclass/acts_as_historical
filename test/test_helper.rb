@@ -1,33 +1,23 @@
 require 'rubygems'
+
+require 'test/unit'
 require 'active_record'
 require 'active_record/fixtures'
 require 'active_support'
 require 'active_support/test_case'
-require 'test/unit'
 require 'shoulda'
-require 'mocha'
-require 'redgreen'
 
 ENV['RAILS_ENV'] = 'test'
-#ENV['RAILS_ROOT'] ||= File.dirname(__FILE__) + '/../../../..'
 
-#require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config/environment.rb'))
+ActiveRecord::Base.logger = Logger.new(StringIO.new) # Shush.
 
 def load_schema
   config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))
 
-  db_adapter = ENV['DB']
-
-  # no db passed, try one of these fine config-free DBs before bombing.
-  db_adapter ||= 'mysql'
-
-  if db_adapter.nil?
-    raise "No DB Adapter selected. Pass the DB= option to pick one, or install Sqlite or Sqlite3."
-  end
+  # Allow user to customise the database used; defaults to mysql.
+  db_adapter = ENV['DB'] ||= 'mysql'
 
   ActiveRecord::Base.establish_connection(config[db_adapter])
-  #Fixtures.create_fixtures(File.dirname(__FILE__), ActiveRecord::Base.connection.tables)
-
 
   load(File.dirname(__FILE__) + "/schema.rb")
   require File.dirname(__FILE__) + '/../rails/init.rb'

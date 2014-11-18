@@ -1,10 +1,9 @@
 require 'date_ext'
-require File.dirname(__FILE__) + '/test_helper.rb'
+require File.expand_path(File.dirname(__FILE__) + '/test_helper.rb')
 
 class ActsAsHistoricalWeekdayTest < ActiveSupport::TestCase
-  load_schema 
+  load_schema
 
-  
   class Record < ActiveRecord::Base
     acts_as_historical
     def snapshot_date
@@ -21,7 +20,7 @@ class ActsAsHistoricalWeekdayTest < ActiveSupport::TestCase
       @tue = Weekday.new(2009,12,1)
       @wed = Weekday.new(2009,12,2)
       @thu = Weekday.new(2009,12,3)
-    
+
       @r_fri = Record.create! :snapshot_date => @fri
       @r_mon = Record.create! :snapshot_date => @mon
       @r_tue = Record.create! :snapshot_date => @tue
@@ -52,7 +51,7 @@ class ActsAsHistoricalWeekdayTest < ActiveSupport::TestCase
         assert results.include?(@r_fri)
       end
     end
-    
+
     context "tolerance over week" do
       should "work" do
         Record.tolerance_to_range(@mon, 1).include?(@fri)

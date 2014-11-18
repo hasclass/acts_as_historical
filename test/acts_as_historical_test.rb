@@ -1,17 +1,16 @@
-require File.dirname(__FILE__) + '/test_helper.rb'
+require File.expand_path(File.dirname(__FILE__) + '/test_helper.rb')
 
 class ActsAsHistoricalTest < ActiveSupport::TestCase
-  load_schema 
+  load_schema
 
-  
   class Record < ActiveRecord::Base
     acts_as_historical
   end
 
-  def test_schema_has_loaded_correctly 
+  def test_schema_has_loaded_correctly
     assert Record.all
-  end 
-  
+  end
+
   def test_to_date
     date = Date.today
     assert_equal Record.create(:snapshot_date => date).to_date, date
@@ -31,14 +30,14 @@ class ActsAsHistoricalTest < ActiveSupport::TestCase
       @wed = Date.new(2009,12,2)
       @thu = Date.new(2009,12,3)
       @fri = Date.new(2009,12,4)
-    
+
       @r_mon = Record.create! :snapshot_date => @mon
-      @r_tue = Record.create! :snapshot_date => @tue    
+      @r_tue = Record.create! :snapshot_date => @tue
       @r_wed = Record.create! :snapshot_date => @wed
       @r_thu = Record.create! :snapshot_date => @thu
-      @r_fri = Record.create! :snapshot_date => @fri      
+      @r_fri = Record.create! :snapshot_date => @fri
     }
-    
+
     should "create 5 records" do
       assert_equal 5, Record.count
     end
@@ -104,10 +103,10 @@ class ActsAsHistoricalTest < ActiveSupport::TestCase
         assert Record.nearest(@fri + 1, 0).empty?
       end
     end
-  
+
     context "between" do
       setup { @records = Record.between(@tue, @wed)}
-      
+
       should "include only days within range" do
         assert  @records.include?(@r_tue)
         assert  @records.include?(@r_wed)
@@ -115,7 +114,7 @@ class ActsAsHistoricalTest < ActiveSupport::TestCase
         assert !@records.include?(@r_thu)
         assert !@records.include?(@r_fri)
       end
-      
+
       should "return record when range start and end are the same" do
         assert Record.between(@mon, @mon).include?(@r_mon)
       end
